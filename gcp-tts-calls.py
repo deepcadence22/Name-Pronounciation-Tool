@@ -32,25 +32,6 @@ def list_voices(language_code,ssml_gender):
     voices = sorted(response.voices, key=lambda voice: voice.name)
     return [voice.name for voice in voices if voice.ssml_gender==(1 if ssml_gender=="MALE" else 2) and "Wavenet" in voice.name and voice.language_codes==[language_code]]
 
-#Given a voice from list_voices() and a text string to convert to speech this function stores the audio into a .wav file with text name as file name
-def text_to_wav(voice_name: str, text: str):
-    language_code = "-".join(voice_name.split("-")[:2])
-    text_input = tts.SynthesisInput(text=text)
-    voice_params = tts.VoiceSelectionParams(
-        language_code=language_code, name=voice_name
-    )
-    audio_config = tts.AudioConfig(audio_encoding=tts.AudioEncoding.LINEAR16)
-
-    client = tts.TextToSpeechClient()
-    response = client.synthesize_speech(
-        input=text_input, voice=voice_params, audio_config=audio_config
-    )
-
-    filename = f"{text}.wav"
-    with open(filename, "wb") as out:
-        out.write(response.audio_content)
-        print(f'Generated speech saved to "{filename}"')
-
 #The following is a rest endpoint which takes the name and voice as inputs in GET method /pronounce?name="Karthik Peddi"&voice="en-IN-Wavenet-B"
 @app.route("/pronounce",methods=["GET"])
 def text_to_wav():
