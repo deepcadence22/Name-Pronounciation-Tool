@@ -37,6 +37,11 @@ def list_voices(language_code,ssml_gender):
 def text_to_wav():
     voice_name=request.args.get("voice").replace("\"","")
     text=request.args.get("name").replace("\"","")
+
+    if voice_name is None:
+        #This is where Akshay's method will be called to get the locale and appropriately select a voice
+        pass #Will be replaced with call to Akshay's method like locale=some_method(text) and based on locale random_voice will be selected
+
     language_code = "-".join(voice_name.split("-")[:2])
     text_input = tts.SynthesisInput(text=text)
     voice_params = tts.VoiceSelectionParams(
