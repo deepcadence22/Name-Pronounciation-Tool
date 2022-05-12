@@ -11,6 +11,14 @@ api=Api(app)
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="involuted-ratio-349909-1bd15b3693bf.json"
 
+#Returns all list of unique languages given a voice
+def unique_languages_from_voices(voices):
+    language_set = set()
+    for voice in voices:
+        for language_code in voice.language_codes:
+            language_set.add(language_code)
+    return language_set
+
 #Returns language_codes/locales that GCP supports
 def list_languages():
     client = tts.TextToSpeechClient()
@@ -34,7 +42,7 @@ def list_voices(language_code,ssml_gender):
 
 #The following is a rest endpoint which takes the name and voice as inputs in GET method /pronounce?name="Karthik Peddi"&voice="en-IN-Wavenet-B"
 @app.route("/pronounce",methods=["GET"])
-def text_to_wav():
+def text_to_wav(voice_name=None,text=None):
     voice_name=request.args.get("voice").replace("\"","")
     text=request.args.get("name").replace("\"","")
 
