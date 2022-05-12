@@ -3,6 +3,11 @@
 import sys
 import os
 import google.cloud.texttospeech as tts
+from flask import Flask, request, Response
+from flask_restful import Api
+
+app=Flask(__name__)
+api=Api(app)
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="involuted-ratio-349909-1bd15b3693bf.json"
 
@@ -45,3 +50,23 @@ def text_to_wav(voice_name: str, text: str):
     with open(filename, "wb") as out:
         out.write(response.audio_content)
         print(f'Generated speech saved to "{filename}"')
+
+#The following is a rest endpoint which takes the name and voice as inputs in GET method /pronounce?name="Karthik Peddi"&voice="en-IN-Wavenet-B"
+@app.route("/pronounce",methods=["GET"])
+def text_to_wav():
+    voice_name=request.args.get("voice").replace("\"","")
+    text=request.args.get("name").replace("\"","")
+    language_code = "-".join(voice_name.split("-")[:2])
+    text_input = tts.SynthesisInput(text=text)
+    voice_params = tts.VoiceSelectionParams(
+        language_code=language_code, name=voice_name
+    )
+    audio_config = tts.AudioConfig(audio_encoding=tts.AudioEncoding.LINEAR16)
+    client = tts.TextToSpeechClient()
+    response = client.synthesize_speech(
+        input=text_input, voice=voice_params, audio_config=audio_config
+    )
+    return Response(response.audio_content, mimetype="audio/wav")
+
+if __name__ == "__main__":
+    app.run()
