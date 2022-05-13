@@ -62,5 +62,9 @@ def text_to_wav(voice_name=None,text=None):
     )
     return Response(response.audio_content, mimetype="audio/wav")
 
+@app.route("/",methods=["GET"])
+def get_nothing():
+    return " "
+    
 if __name__ == "__main__":
     app.run(host="localhost",port=8080,debug=True)
