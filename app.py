@@ -68,4 +68,4 @@ def get_nothing():
     
 if __name__ == "__main__":
     server_port=os.environ.get('PORT','8080')
-    app.run(host="localhost",port=server_port,debug=False)
+    app.run(host="localhost",port=int(server_port),debug=False)
