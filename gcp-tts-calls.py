@@ -3,11 +3,6 @@
 import sys
 import os
 import google.cloud.texttospeech as tts
-from flask import Flask, request, Response
-from flask_restful import Api
-
-app=Flask(__name__)
-api=Api(app)
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="involuted-ratio-349909-1bd15b3693bf.json"
 
