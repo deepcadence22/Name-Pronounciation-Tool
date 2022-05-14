@@ -40,32 +40,23 @@ def list_voices(language_code,ssml_gender):
     voices = sorted(response.voices, key=lambda voice: voice.name)
     return [voice.name for voice in voices if voice.ssml_gender==(1 if ssml_gender=="MALE" else 2) and "Wavenet" in voice.name and voice.language_codes==[language_code]]
 
-#The following is a rest endpoint which takes the name and voice as inputs in GET method /pronounce?name="Karthik Peddi"&voice="en-IN-Wavenet-B"
-@app.route("/pronounce",methods=["GET"])
-def text_to_wav(voice_name=None,text=None):
-    voice_name=request.args.get("voice").replace("\"","")
-    text=request.args.get("name").replace("\"","")
-
+#The following is a method which takes the name and voice as inputs and returns the audio output as bytes (called by the FLASK Application)
+#voice_name should be one of list_voices() method and pitch should be in range[-20.0,20.0] (inclusive) and speed should be in range[0.25,4.0] (inclusive)
+def text_to_wav(text,voice_name=None,pitch=0,speed=1):
     if voice_name is None:
-        #This is where Akshay's method will be called to get the locale and appropriately select a voice
-        pass #Will be replaced with call to Akshay's method like locale=some_method(text) and based on locale random_voice will be selected
-
+        #This is where Akshay's method will be called to get the locale and appropriately select a 
+        locale = "en-IN"#Will be replaced with call to Akshay's method like locale=some_method(text)
+        gender=list_genders(locale)[0]
+        voice_name=list_voices(locale,gender)[0]
     language_code = "-".join(voice_name.split("-")[:2])
     text_input = tts.SynthesisInput(text=text)
     voice_params = tts.VoiceSelectionParams(
         language_code=language_code, name=voice_name
     )
-    audio_config = tts.AudioConfig(audio_encoding=tts.AudioEncoding.LINEAR16)
+    audio_config = tts.AudioConfig(audio_encoding=tts.AudioEncoding.LINEAR16,pitch=pitch,speaking_rate=speed)
     client = tts.TextToSpeechClient()
     response = client.synthesize_speech(
         input=text_input, voice=voice_params, audio_config=audio_config
     )
-    return Response(response.audio_content, mimetype="audio/wav")
+    return response.audio_content
 
-@app.route("/",methods=["GET"])
-def get_nothing():
-    return " "
-    
-if __name__ == "__main__":
-    server_port=os.environ.get('PORT','8080')
-    app.run(host="localhost",port=int(server_port),debug=False)
