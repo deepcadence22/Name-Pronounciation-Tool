@@ -59,7 +59,7 @@ def detect_language(name):
     
 
 
-def name_to_locale(name, pref_name):
+def name_to_locale(name, pref_name=""):
     
     pref_name.strip()
     lang = detect_language(pref_name)
