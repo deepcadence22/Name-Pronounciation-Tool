@@ -1,12 +1,8 @@
 import requests
 import unicodedata2
+from gcp_tts_calls import list_languages
 
-
-available = ['af-ZA','ar-XA','bg-BG','bn-IN','ca-ES','cmn-CN','cmn-TW','cs-CZ','da-DK','de-DE','el-GR',
-             'en-AU','en-GB','en-IN','en-US','es-ES','es-US','fi-FI','fil-PH','fr-FR','fr-CA','gu-IN',
-             'hi-IN','hu-HU','id-ID','is-IS','it-IT','ja-JP','kn-IN','ko-KR','lv-LV','ml-IN','ms-MY',
-             'nb-NO','nl-NL','nl-BE','pa-IN','pl-PL','pt-PT','pt-BR','ro-RO','ru-RU','sk-SK','sr-RS',
-             'sv-SE','ta-IN','te-IN','th-TH','tr-TR','uk-UA','vi-VN','yue-HK']
+available = list_languages()
 languages = []
 for i in available:
     languages.append(i[:len(i)-3])
