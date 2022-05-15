@@ -3,6 +3,7 @@
 import sys
 import os
 import google.cloud.texttospeech as tts
+from locale_detection import name_to_locale
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="involuted-ratio-349909-1bd15b3693bf.json"
 
@@ -39,8 +40,7 @@ def list_voices(language_code,ssml_gender):
 #voice_name should be one of list_voices() method and pitch should be in range[-20.0,20.0] (inclusive) and speed should be in range[0.25,4.0] (inclusive)
 def text_to_wav(text,voice_name=None,pitch=0,speed=1):
     if voice_name is None:
-        #This is where Akshay's method will be called to get the locale and appropriately select a 
-        locale = "en-IN"#Will be replaced with call to Akshay's method like locale=some_method(text)
+        locale = name_to_locale(text)
         gender=list_genders(locale)[0]
         voice_name=list_voices(locale,gender)[0]
     language_code = "-".join(voice_name.split("-")[:2])
