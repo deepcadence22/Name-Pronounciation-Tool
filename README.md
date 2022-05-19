@@ -10,11 +10,11 @@ by the user.
 Publicly accesible Link:
 https://documenter.getpostman.com/view/20992626/UyxjH6ec
 
-#Instructions to deploying the following application to GCP
+# Instructions to deploying the following application to GCP
 
 The instructions to deploy to GCP are given in the pdf Documentation/playbook.pdf in the repository.
 
-#Instructions to run the app in your local machine
+# Instructions to run the app in your local machine
 
 1. Checkout the code from github to your local machine.
 2. Download the two json files which correspond to the GCP and cloud sql postgres credentials into the directory of the downloaded code.
